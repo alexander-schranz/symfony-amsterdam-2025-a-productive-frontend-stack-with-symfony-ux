@@ -1,0 +1,42 @@
+{%- types
+    text: 'string',
+    id?: 'string',
+    type?: 'string',
+    for?: 'string',
+    commandfor?: 'string',
+    command?: 'string',
+    href?: 'string',
+    form: 'string',
+-%}
+
+{#-
+ # In a design system a button can have different use cases. For keep the HTML semantic correctly for
+ # accessibility reasons we need to change the tag based on the use case.
+ #}
+{%- set tag = href|default ? 'a' : (for|default ? 'label' : 'button') -%}
+
+{%- set id = id|default(null) -%}
+{#- button attributes -#}
+{%- set type = tag == 'button' ? (type|default('button')) : null -%}
+{%- set form = tag == 'button' ? (form|default(null)) : null -%}
+{%- set commandfor = tag == 'button' ? (commandfor|default(null)) : null -%}
+{%- set command = tag == 'button' ? (command|default(null)) : null -%}
+{#- link attributes -#}
+{%- set href = tag == 'a' ? (href|default(null)) : null -%}
+{#- label attributes -#}
+{%- set for = tag == 'label' ? (for|default(null)) : null -%}
+
+<{{ tag }} {# attributes -#}
+    {%- if id %} type="{{ id }}" {%- endif -%}
+    {#- button attributes -#}
+    {%- if type %} type="{{ type }}" {%- endif -%}
+    {%- if form %} form="{{ form }}" {%- endif -%}
+    {%- if commandfor %} commandfor="{{ commandfor }}" {%- endif -%}
+    {%- if command %} command="{{ command }}" {%- endif -%}
+    {#- link attributes -#}
+    {%- if href %} form="{{ form }}" {%- endif -%}
+    {#- label attributes -#}
+    {%- if for %} form="{{ for }}" {%- endif -%}
+>
+    {{- text -}}
+</{{ tag }}>

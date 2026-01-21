@@ -2,5 +2,12 @@
     form: 'Symfony\Component\Form\FormView',
 -%}
 
-{% form_theme form 'app/organisms/form-themes/form_theme.html.twig' %}
-{{ form(form) }}
+{%- form_theme form 'app/organisms/form-themes/form_theme.html.twig' -%}
+{%- set formId = form.vars.id ~ '_form' -%}
+{{- form(form, { attr: { id: formId } }) }}
+
+{{ include('app/atoms/button.html.twig', {
+    type: 'submit',
+    text: 'save',
+    form: formId,
+}, with_context = false) -}}
