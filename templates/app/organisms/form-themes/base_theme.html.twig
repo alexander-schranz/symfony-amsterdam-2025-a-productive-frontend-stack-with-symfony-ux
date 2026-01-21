@@ -1,0 +1,199 @@
+{% use 'form_div_layout.html.twig' %}
+
+{#- this file provides a bridge to our design system without the need that the design system knows anything about symfony forms -#}
+
+{%- block form_label -%}
+    {%- if label is not same as(false) -%}
+        {{- include('app/atoms/label.html.twig', {
+            for: id,
+            text: block('form_label_inner'),
+            disabled: disabled,
+            required: required,
+        }, ) -}}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{%- block form_label_inner -%}
+    {#- apply symfony form label logic here our design system should -#}
+    {%- set label = translation_domain is same as(false) ? label : label|trans(label_translation_parameters, translation_domain) -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {%- set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) -%}
+        {%- else -%}
+            {%- set label = name|humanize -%}
+        {%- endif -%}
+    {%- endif -%}
+    {{- label|raw -}} {#- the label component escapes the value itself, here we require raw value to avoid double escaping -#}
+{%- endblock form_label_inner -%}
+
+{%- block form_widget_simple -%}
+    {{- include('app/atoms/input.html.twig', {
+        id: id,
+        type: type|default('text'),
+        name: full_name,
+        value: value,
+        placeholder: block('form_placeholder'),
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock form_widget_simple -%}
+
+{%- block form_placeholder -%}
+    {#- apply symfony form placholder logic here our design system should -#}
+    {%- set placeholder = placeholder|default(attr.placeholder|default('')) -%}
+    {%- set placeholder = (translation_domain is same as(false) or placeholder ? placeholder : placeholder|trans(attr_translation_parameters, translation_domain)) -%}
+    {{- placeholder|raw -}}
+{%- endblock form_placeholder -%}
+
+{%- block textarea_widget -%}
+    {{- include('app/atoms/text_area.html.twig', {
+        id: id,
+        name: full_name,
+        value: value,
+        placeholder: block('form_placeholder'),
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock textarea_widget -%}
+
+{%- block choice_widget_collapsed -%}
+    {#
+    Our design system should not be related to symfony form options structure,
+    so convert options to a common format.
+    #}
+    {% set allOptions = (choices|map((choice) => {
+        value: choice.value,
+        label: choice_translation_domain is same as(false) ? choice.label : choice.label|trans(choice.labelTranslationParameters, choice_translation_domain),
+        checked: choice.value in value,
+    })) %}
+
+    {% set preferredValues = (preferred_choices|map((choice) => choice.value)) %}
+
+    {% set options = [
+        ...(allOptions|filter(choice => choice.value in preferredValues)),
+        ...(not multiple and preferredValues|length ? [{
+            value: '',
+            label: '---',
+            checked: false,
+        }] : []),
+        ...(allOptions|filter(choice => choice.value not in preferredValues)),
+    ] %}
+
+    {{- include('app/atoms/select.html.twig', {
+        id: id,
+        name: full_name,
+        placeholder: block('form_choice_placeholder'),
+        withEmptyOption: not required,
+        options: options,
+        disabled: disabled,
+        required: required,
+        multiple: multiple,
+    }, with_context = false) }}
+{%- endblock choice_widget_collapsed -%}
+
+{%- block form_choice_placeholder -%}
+    {#- apply symfony form placholder logic here our design system should -#}
+    {%- set placeholder = (choice_translation_domain is same as(false) and placeholder ? placeholder : placeholder|trans({}, choice_translation_domain)) -%}
+    {{- placeholder|raw -}}
+{%- endblock form_choice_placeholder -%}
+
+{%- block checkbox_widget -%}
+    {{- include('app/atoms/input_checkbox.html.twig', {
+        id: id,
+        name: full_name,
+        value: value|default(null),
+        checked: checked,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    {{- include('app/atoms/input_radio.html.twig', {
+        id: id,
+        name: full_name,
+        value: value|default(null),
+        checked: checked,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock radio_widget -%}
+
+{%- block datetime_widget -%}
+    {#-
+    In a design system all datetime input should look the same
+    so only a single widget should be supported we expect here single_text.
+    -#}
+    {{- include('app/atoms/input_date_time.html.twig', {
+        id: id,
+        name: full_name,
+        value: value,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock datetime_widget -%}
+
+{%- block date_widget -%}
+    {#-
+    In a design system all datetime input should look the same
+    so only a single widget should be supported we expect here single_text.
+    -#}
+    {{- include('app/atoms/input_date.html.twig', {
+        id: id,
+        name: full_name,
+        value: value,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock date_widget -%}
+
+{%- block time_widget -%}
+    {#-
+    In a design system all datetime input should look the same
+    so only a single widget should be supported we expect here single_text.
+    -#}
+    {{- include('app/atoms/input_time.html.twig', {
+        id: id,
+        name: full_name,
+        value: value,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock time_widget -%}
+
+{%- block dateinterval_widget -%}
+    {#-
+    In a design system all datetime input should look the same
+    so only a single widget should be supported we expect here single_text.
+    -#}
+    {{- include('app/atoms/input.html.twig', {
+        id: id,
+        type: 'text',
+        name: full_name,
+        value: value,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock dateinterval_widget -%}
+
+{%- block week_widget -%}
+    {#-
+    In a design system all datetime input should look the same
+    so only a single widget should be supported we expect here single_text.
+    -#}
+    {{- include('app/atoms/input.html.twig', {
+        id: id,
+        type: 'week',
+        name: full_name,
+        value: value,
+        required: required|default(false),
+        disabled: disabled|default(false),
+    }, with_context=false) -}}
+{%- endblock week_widget -%}
+
+{%- block button_widget -%}
+    {# TODO #}
+{%- endblock button_widget -%}

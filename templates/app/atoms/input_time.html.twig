@@ -1,0 +1,19 @@
+{%- types
+    id: 'string',
+    name: 'string',
+    value: 'string',
+    required?: 'boolean',
+    disabled?: 'boolean',
+-%}
+
+{%- set required = required|default(false) -%}
+{%- set disabled = disabled|default(false) -%}
+
+<input {# attributes -#}
+    id="{{ id }}" {# -#}
+    type="time" {# -#}
+    name="{{ name }}" {# -#}
+    value="{{ value }}" {# -#}
+    {%- if required %} required {%- endif -%}
+    {%- if disabled %} disabled {%- endif -%}
+/>
