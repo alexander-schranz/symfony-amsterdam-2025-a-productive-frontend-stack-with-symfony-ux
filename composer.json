@@ -30,7 +30,8 @@
     "require-dev": {
         "symfony/debug-bundle": "7.3.*",
         "symfony/var-dumper": "7.3.*",
-        "symfony/web-profiler-bundle": "7.3.*"
+        "symfony/web-profiler-bundle": "7.3.*",
+        "vincentlanglet/twig-cs-fixer": "^3.12"
     },
     "config": {
         "allow-plugins": {
@@ -72,7 +73,11 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "fix": [
+            "@fix-twig"
+        ],
+        "fix-twig": "vendor/bin/twig-cs-fixer fix templates"
     },
     "conflict": {
         "symfony/symfony": "*"
