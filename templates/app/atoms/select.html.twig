@@ -1,0 +1,36 @@
+{#-
+# Depending on the diff in the Design system, a select_single and select_multiple could be created
+# instead of this general select component.
+-#}
+{%- types
+    id: 'string',
+    name: 'string',
+    options: 'array<{value: string, label: string, checked: boolean}>',
+    placeholder?: 'string',
+    multiple?: 'boolean',
+    required?: 'boolean',
+    withEmptyOption?: 'boolean',
+    disabled?: 'boolean',
+-%}
+
+{%- set placeholder = placeholder|default('') -%}
+{%- set multiple = multiple|default(false) -%}
+{%- set required = required|default(false) -%}
+{%- set withEmptyOption = (not required) ? true : withEmptyOption|default(false) -%}
+{%- set disabled = disabled|default(false) -%}
+
+<select {# attributes -#}
+    id="{{ id }}" {# -#}
+    name="{{ name }}" {# -#}
+    {%- if multiple %} size="1" multiple {%- endif -%}
+    {%- if required %} required {%- endif -%}
+    {%- if disabled %} disabled {%- endif -%}
+>
+    {%- if placeholder or withEmptyOption %}
+        <option value="">{{ placeholder }}</option>
+    {%- endif %}
+
+    {%- for option in options %}
+        <option value="{{ option.value }}" {%- if option.checked %} selected {%- endif -%}>{{ option.label }}</option>
+    {%- endfor %}
+</select>

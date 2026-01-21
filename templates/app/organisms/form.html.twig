@@ -2,4 +2,5 @@
     form: 'Symfony\Component\Form\FormView',
 -%}
 
+{% form_theme form 'app/organisms/form-themes/form_theme.html.twig' %}
 {{ form(form) }}

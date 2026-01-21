@@ -1,0 +1,16 @@
+{%- types
+    for: 'string',
+    text: 'string',
+    required?: 'boolean',
+    disabled?: 'boolean',
+-%}
+
+{%- set required = required|default(false) -%}
+{%- set disabled = disabled|default(false) -%}
+
+<label {# attributes -#}
+    for="{{ for }}" {# -#}
+    class="block"
+>
+    {{- text -}}
+</label>

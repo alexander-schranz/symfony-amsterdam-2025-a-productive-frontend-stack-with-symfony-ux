@@ -1,0 +1,22 @@
+{%- types
+    id: 'string',
+    name: 'string',
+    value: 'string',
+    placeholder?: 'string',
+    required?: 'boolean',
+    disabled?: 'boolean',
+-%}
+
+{%- set placeholder = placeholder|default(false) -%}
+{%- set required = required|default(false) -%}
+{%- set disabled = disabled|default(false) -%}
+
+<input {# attributes -#}
+    id="{{ id }}" {# -#}
+    type="datetime-local" {# -#}
+    name="{{ name }}" {# -#}
+    value="{{ value }}" {# -#}
+    {%- if placeholder %} placeholder="{{ placeholder }}" {%- endif -%}
+    {%- if required %} required {%- endif -%}
+    {%- if disabled %} disabled {%- endif -%}
+/>
