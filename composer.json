@@ -28,6 +28,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "php-cs-fixer/shim": "^3.92",
         "symfony/debug-bundle": "7.3.*",
         "symfony/var-dumper": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*",
@@ -75,9 +76,11 @@
             "@auto-scripts"
         ],
         "fix": [
-            "@fix-twig"
+            "@fix-twig",
+            "@fix-php"
         ],
-        "fix-twig": "vendor/bin/twig-cs-fixer fix templates"
+        "fix-twig": "vendor/bin/twig-cs-fixer fix templates",
+        "fix-php": "vendor/bin/php-cs-fixer fix"
     },
     "conflict": {
         "symfony/symfony": "*"
