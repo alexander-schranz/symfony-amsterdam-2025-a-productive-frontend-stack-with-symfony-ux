@@ -1,0 +1,10 @@
+{%- types
+    title?: 'string',
+    form: 'Symfony\Component\Form\FormView',
+-%}
+
+{%- extends 'app/base.html.twig' -%}
+
+{% block main %}
+    {{ include('app/organisms/form.html.twig', { form: form }, with_context = false) }}
+{% endblock %}
